@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Performance Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background: #0d1117;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    canvas {
+      max-width: 400px;
+      margin-top: 2rem;
+    }
+    h2 {
+      color: #58a6ff;
+    }
+  </style>
+</head>
+<body>
+  <h2>📈 Win Rate Tracker</h2>
+  <canvas id="winChart"></canvas>
+
+  <script>
+    const history = JSON.parse(localStorage.getItem("history") || "[]");
+    let tp = 0, sl = 0, no = 0;
+
+    history.forEach(h => {
+      if (h.outcome === "TP") tp++;
+      else if (h.outcome === "SL") sl++;
+      else no++;
+    });
+
+    const ctx = document.getElementById("winChart").getContext("2d");
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Take Profit', 'Stop Loss', 'No Trades'],
+        datasets: [{
+          data: [tp, sl, no],
+          backgroundColor: ['#16a34a', '#dc2626', '#52525b'],
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            labels: { color: '#fff', font: { size: 14 } }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
